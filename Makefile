@@ -9,7 +9,7 @@ TARGET = cmkv
 
 
 all: $(SRC)
-	$(CXX) $(CXXFLAGS) $(SRC) -Idist/ -Ldist/ -lfreeimage -o $(TARGET)
+	$(CXX) $(CXXFLAGS) $(SRC) -lfreeimage -o $(TARGET)
 
 clean:
 	rm -rf $(TARGET)
