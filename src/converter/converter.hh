@@ -1,5 +1,5 @@
 #pragma once
-#include <FreeImage.h>
+#include <FreeImagePlus.h>
 #include <string>
 #include <iostream>
 
@@ -9,7 +9,8 @@ class Converter {
 
 public:
     Converter(string path_in, string path_out);
-    bool convert() const;
+    bool convert();
+    void convert_color(RGBQUAD& color);
 
 private:
     string in;
