@@ -28,15 +28,16 @@ bool Converter::convert() {
 }
 
 void Converter::convert_color(RGBQUAD& color) {
-    if (color.rgbRed > 127)
+    unsigned threshold = 128;
+    if (color.rgbRed > threshold)
         color.rgbRed = 255;
     else
         color.rgbRed = 0;
-    if (color.rgbGreen > 127)
+    if (color.rgbGreen > threshold)
         color.rgbGreen = 255;
     else
         color.rgbGreen = 0;
-    if (color.rgbBlue > 127)
+    if (color.rgbBlue > threshold)
         color.rgbBlue = 255;
     else
         color.rgbBlue = 0;
