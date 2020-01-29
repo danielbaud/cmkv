@@ -7,8 +7,9 @@ SRC = src/main.cc src/converter/converter.cc
 TARGET = cmkv
 
 
+all: $(TARGET)
 
-all: $(SRC)
+$(TARGET): $(SRC)
 	$(CXX) $(CXXFLAGS) $(SRC) -lfreeimageplus -o $(TARGET)
 
 clean:

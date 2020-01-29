@@ -6,31 +6,45 @@ Converter::Converter(string path_in, string path_out)
 
 bool Converter::convert() {
     fipImage image_in = fipImage();
+
+    // Loads the image
     image_in.load(this->in.c_str());
     if (!image_in.isValid()) {
         cerr << this->in << ": File is invalid" << endl;
         return false;
     }
     unsigned bpp = image_in.getBitsPerPixel();
-    vector<vector<char>> m = this->map_image(image_in);
-    if (!this->pooling(m, 101)) {
+
+    // Average pooling (applies blur)
+    if (!this->average_pooling(image_in, 7)) {
         cerr << "Invalid pooling k" << endl;
         return false;
     }
+    
+    // Pooling
+    vector<vector<char>> m = this->map_image(image_in);
+    if (!this->pooling(m, 7)) {
+        cerr << "Invalid pooling k" << endl;
+        return false;
+    }
+
+    // Generation and writing of the image
     fipImage image_out = this->generate_image(m, bpp);
     image_out.save(FIF_PNG, this->out.c_str());
     return true;
 }
 
 char Converter::convert_color(RGBQUAD& color) {
-    unsigned threshold = 127;
+    unsigned rthreshold = 127;
+    unsigned gthreshold = 127;
+    unsigned bthreshold = 127;
     char colors[] = {'K', 'B', 'G', 'C', 'R', 'M', 'Y', 'W'};
     unsigned index = 0;
-    if (color.rgbRed > threshold)
+    if (color.rgbRed > rthreshold)
         index += 4;
-    if (color.rgbGreen > threshold)
+    if (color.rgbGreen > gthreshold)
         index += 2;
-    if (color.rgbBlue > threshold)
+    if (color.rgbBlue > bthreshold)
         index += 1;
     return colors[index];
 }
@@ -73,6 +87,7 @@ fipImage Converter::generate_image(const vector<vector<char>>& m, unsigned bpp) 
             ret.setPixelColor(i, j, &color);
         }
     }
+    ret.convertTo24Bits();
     return ret;
 }
 
@@ -105,5 +120,39 @@ bool Converter::pooling(vector<vector<char>>& m, int k) {
         }
     }
     m = ret;
+    return true;
+}
+
+bool Converter::average_pooling(fipImage& image, int k) {
+    fipImage ret = fipImage(image);
+    int width = ret.getWidth();
+    int height = ret.getHeight();
+    double size = k * k;
+    if (k % 2 == 0 || k < 0)
+        return false;
+    for (int i = 0; i < width; ++i) {
+        for (int j = 0; j < height; ++j) {
+            double rmean = 0;
+            double gmean = 0;
+            double bmean = 0;
+            for (int x = -k/2; x <= k/2; ++x) {
+                for (int y = -k/2; y <= k/2; ++y){
+                    if (i + x >= 0 && i + x < width && j + y >= 0 && j + y < height){
+                        RGBQUAD color;
+                        image.getPixelColor(i + x, j + y, &color);
+                        rmean += color.rgbRed;
+                        gmean += color.rgbGreen;
+                        bmean += color.rgbBlue;
+                    }
+                }
+            }
+            RGBQUAD color_set;
+            color_set.rgbRed = rmean / size;
+            color_set.rgbGreen = gmean / size;
+            color_set.rgbBlue = bmean / size;
+            ret.setPixelColor(i, j, &color_set);
+        }
+    }
+    image = ret;
     return true;
 }

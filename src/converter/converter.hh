@@ -17,6 +17,7 @@ public:
     fipImage generate_image(const vector<vector<char>>& m, unsigned bpp);
     RGBQUAD convert_code(char c);
     bool pooling(vector<vector<char>>& m, int k);
+    bool average_pooling(fipImage& image, int k);
 
 private:
     string in;
