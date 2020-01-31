@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Werror -Wextra -Wall -pedantic -std=c++17 -O5
+CXXFLAGS = -Werror -Wextra -Wall -pedantic -std=c++17 -Ofast -g
 
 .PHONY: clean
 
