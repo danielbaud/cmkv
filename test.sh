@@ -1,13 +1,18 @@
 #!/bin/bash
 
-if [ $# -ne 1 ]; then
-    echo "image.png ??"
-    exit 1
+make -s
+rm out.png &> /dev/null
+pngdir="png"
+
+if [ $# -ne 1 ]; then    
+    for image in $(ls $pngdir); do
+        ./cmkv $pngdir/$image out.png
+        feh $pngdir/$image out.png
+        rm out.png
+    done
+    exit 0
 fi
 
-make -s
-
-rm out.png &> /dev/null
 ./cmkv $1 out.png
 feh $1 out.png
 rm out.png
