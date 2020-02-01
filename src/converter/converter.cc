@@ -1,10 +1,17 @@
 #include "converter.hh"
 
+
+// Constructor
 Converter::Converter(string path_in, string path_out)
 : out(path_out)
 {
+    // Number of colors to reduce to
     unsigned colors = 8;
+
+    // Size of Sphere to stop the convergence of kmeans
     double diff_threshold = 5;
+
+    // Image loading
     this->image = fipImage();
     this->image.load(path_in.c_str());
     if (!this->image.isValid()) {
@@ -14,6 +21,7 @@ Converter::Converter(string path_in, string path_out)
     unsigned width = this->image.getWidth();
     unsigned height = this->image.getHeight();
 
+    // Clusters initialization
     this->clusters = vector<RGBQUAD>(colors);
     
     for (unsigned i = 0; i < colors; ++i) {
@@ -22,6 +30,7 @@ Converter::Converter(string path_in, string path_out)
         this->clusters[i].rgbBlue = i % 2 == 0 ? 0 : 255;
     }
 
+    // Kmeans Algorithm
     double update_diff = 100;
 
     while (update_diff > diff_threshold) {
@@ -52,11 +61,13 @@ Converter::Converter(string path_in, string path_out)
     }
 }
 
+// Function that writes the converted image
 bool Converter::convert() {
 
+    // Kernel size, 5 is great
     unsigned kernel_size = 5;
 
-    // Average pooling (applies blur)
+    // Average pooling (applies blurr)
     if (!this->average_pooling(this->image, kernel_size)) {
         cerr << "Invalid pooling k" << endl;
         return false;
@@ -76,6 +87,7 @@ bool Converter::convert() {
     return true;
 }
 
+// Computes the distance between a color and the cluster color
 double Converter::distance(RGBQUAD& color, int cluster) {
     RGBQUAD cluster_color = this->clusters[cluster];
     double red = cluster_color.rgbRed - color.rgbRed;
@@ -87,6 +99,7 @@ double Converter::distance(RGBQUAD& color, int cluster) {
     return sqrt(red + green + blue);
 }
 
+// Returns the closest cluster of the color
 int Converter::get_cluster(RGBQUAD& color) {
     int cluster = 0;
     int distance = this->distance(color, 0);
@@ -100,6 +113,7 @@ int Converter::get_cluster(RGBQUAD& color) {
     return cluster;
 }
 
+// Maps a image with clusters instead
 vector<vector<int>> Converter::map_image(const fipImage& image) {
     unsigned width = image.getWidth();
     unsigned height = image.getHeight();
@@ -114,6 +128,7 @@ vector<vector<int>> Converter::map_image(const fipImage& image) {
     return m;
 }
 
+// Generates a image according to the clusters mapped
 fipImage Converter::generate_image(const vector<vector<int>>& m, unsigned bpp) {
     unsigned width = m.size();
     unsigned height = m[0].size();
@@ -128,6 +143,7 @@ fipImage Converter::generate_image(const vector<vector<int>>& m, unsigned bpp) {
     return ret;
 }
 
+// Changes a pixel cluster according to its surroundings
 bool Converter::pooling(vector<vector<int>>& m, int k) {
     int width = m.size();
     int height = m[0].size();
@@ -159,6 +175,7 @@ bool Converter::pooling(vector<vector<int>>& m, int k) {
     return true;
 }
 
+// Blurring applied to a image
 bool Converter::average_pooling(fipImage& image, int k) {
     fipImage ret = fipImage(image);
     int width = ret.getWidth();
