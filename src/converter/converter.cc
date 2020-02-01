@@ -50,21 +50,24 @@ Converter::Converter(string path_in, string path_out)
 }
 
 bool Converter::convert() {
-    unsigned bpp = this->image.getBitsPerPixel();
+
+    unsigned kernel_size = 5;
+
     // Average pooling (applies blur)
-    if (!this->average_pooling(this->image, 7)) {
+    if (!this->average_pooling(this->image, kernel_size)) {
         cerr << "Invalid pooling k" << endl;
         return false;
     }
     
     // Pooling
     vector<vector<int>> m = this->map_image(this->image);
-    if (!this->pooling(m, 7)) {
+    if (!this->pooling(m, kernel_size)) {
         cerr << "Invalid pooling k" << endl;
         return false;
     }
     
     // Generation and writing of the image
+    unsigned bpp = this->image.getBitsPerPixel();
     fipImage image_out = this->generate_image(m, bpp);
     image_out.save(FIF_PNG, this->out.c_str());
     return true;
