@@ -4,7 +4,7 @@ Converter::Converter(string path_in, string path_out)
 : out(path_out)
 {
     unsigned colors = 8;
-    srand(128);
+    double diff_threshold = 5;
     this->image = fipImage();
     this->image.load(path_in.c_str());
     if (!this->image.isValid()) {
@@ -17,15 +17,16 @@ Converter::Converter(string path_in, string path_out)
     this->clusters = vector<RGBQUAD>(colors);
     
     for (unsigned i = 0; i < colors; ++i) {
-        this->clusters[i].rgbRed = i < 4 ? 0 : 255;
-        this->clusters[i].rgbGreen = (i % 4) < 2 ? 0 : 255;
+        this->clusters[i].rgbRed = i < colors / 2 ? 0 : 255;
+        this->clusters[i].rgbGreen = (i % colors / 2) < colors / 4 ? 0 : 255;
         this->clusters[i].rgbBlue = i % 2 == 0 ? 0 : 255;
     }
 
-    vector<unsigned> counts = vector<unsigned>(colors, 0);
-    vector<vector<double>> avgs = vector<vector<double>>(colors, vector<double>(3, 0));
+    double update_diff = 100;
 
-    for (unsigned x = 0; x < 10; ++x) {
+    while (update_diff > diff_threshold) {
+        auto counts = vector<unsigned>(colors, 0);
+        auto avgs = vector<vector<double>>(colors, vector<double>(3, 0));
         for (unsigned i = 0; i < width; ++i) {
             for (unsigned j = 0; j < height; ++j) {
                 RGBQUAD color;
@@ -37,15 +38,17 @@ Converter::Converter(string path_in, string path_out)
                 avgs[cluster][2] += color.rgbBlue;
             }
         }
+        update_diff = 0;
         for (unsigned c = 0; c < colors; ++c) {
+            RGBQUAD cluster = this->clusters[c];
             if (counts[c] > 0) {
                 this->clusters[c].rgbRed = (int)(avgs[c][0] / counts[c]);
                 this->clusters[c].rgbGreen = (int)(avgs[c][1] / counts[c]);
                 this->clusters[c].rgbBlue = (int)(avgs[c][2] / counts[c]);
             }
+            update_diff += this->distance(cluster, c);
         }
-        counts = vector<unsigned>(colors, 0);
-        avgs = vector<vector<double>>(colors, vector<double>(3, 0));
+        update_diff /= 8;
     }
 }
 
@@ -75,9 +78,12 @@ bool Converter::convert() {
 
 double Converter::distance(RGBQUAD& color, int cluster) {
     RGBQUAD cluster_color = this->clusters[cluster];
-    double red = (cluster_color.rgbRed - color.rgbRed) * (cluster_color.rgbRed - color.rgbRed);
-    double green = (cluster_color.rgbGreen - color.rgbGreen) * (cluster_color.rgbGreen - color.rgbGreen);
-    double blue = (cluster_color.rgbBlue - color.rgbBlue) * (cluster_color.rgbBlue - color.rgbBlue);
+    double red = cluster_color.rgbRed - color.rgbRed;
+    red *= red;
+    double green = cluster_color.rgbGreen - color.rgbGreen;
+    green *= green;
+    double blue = cluster_color.rgbBlue - color.rgbBlue;
+    blue *= blue;
     return sqrt(red + green + blue);
 }
 
@@ -185,11 +191,4 @@ bool Converter::average_pooling(fipImage& image, int k) {
     }
     image = ret;
     return true;
-}
-
-void Converter::print_clusters() {
-    for (unsigned i = 0; i < this->clusters.size(); ++i) {
-        cout << "Cluster " << i << " R = " << (int)this->clusters[i].rgbRed << " G = ";
-        cout << (int)this->clusters[i].rgbGreen << " B = " << (int)this->clusters[i].rgbGreen << endl;
-    }
 }

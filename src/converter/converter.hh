@@ -22,9 +22,7 @@ public:
 
     bool pooling(vector<vector<int>>& m, int k); // set all pixels to the majority of what's around them
     bool average_pooling(fipImage& image, int k); // average pooling of image (blurring)
-
-    void print_clusters();
-
+    
 private:
     string out;
     fipImage image;
