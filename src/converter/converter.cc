@@ -66,7 +66,7 @@ Converter::Converter(string path_in, string path_out)
 bool Converter::convert() {
 
     // Kernel size, 5 is great
-    unsigned kernel_size = 5;
+    unsigned kernel_size = 7;
 
     // Average pooling (applies blurr)
     if (!this->average_pooling(this->image, kernel_size)) {

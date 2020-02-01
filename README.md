@@ -14,7 +14,7 @@ The KMeans isolates the 8 dominating colors of the pictures, and those will be t
 
 ### Blurring
 
-To reduce the amount of residual pixels in the edges of the image, a blurring is applied with a kernel of 5 * 5 by default around the pixels. This allows to have smoother edge when generating the new image.
+To reduce the amount of residual pixels in the edges of the image, a blurring is applied with a kernel of 7 * 7 by default around the pixels. This allows to have smoother edge when generating the new image.
 
 ### Mapping
 
@@ -22,7 +22,7 @@ Once the image is blurred, it is also mapped to be displayed with the 8 colors o
 
 ### Max-Pooling
 
-The max pooling isn't actually a max-pooling like the ones used in convolution, but a max pooling that will overwrite a pixel with the most present pixel around him, and also in a 5*5 kernel by default.
+The max pooling isn't actually a max-pooling like the ones used in convolution, but a max pooling that will overwrite a pixel with the most present pixel around him, and also in a 7*7 kernel by default.
 
 Since at this point there are only 8 colors, the pixel will be the color of the most present color around him, to avoid residual pixels and small chunks of colors and smooth the image.
 
