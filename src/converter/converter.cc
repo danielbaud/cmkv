@@ -20,6 +20,7 @@ Converter::Converter(string path_in, string path_out)
     }
     unsigned width = this->image.getWidth();
     unsigned height = this->image.getHeight();
+    this->image.convertTo24Bits();
 
     // Clusters initialization
     this->clusters = vector<RGBQUAD>(colors);
