@@ -51,3 +51,9 @@ Here are some examples
 
 ![](doc/lion.png?raw=true "Before")
 ![](doc/lion_out.png?raw=true "After")
+---
+![](doc/smoke.png?raw=true "Before")
+![](doc/smoke_out.png?raw=true "After")
+---
+![](doc/parrots.png?raw=true "Before")
+![](doc/parrots_out.png?raw=true "After")
