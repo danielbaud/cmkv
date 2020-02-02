@@ -44,3 +44,10 @@ $ cmkv <in.png> <out.png>
 ```
 
 This will take _in.png_ and generate the _out.png_ image as a result of color clustering and size reducing.
+
+## Examples
+
+Here are some examples
+
+![](doc/lion.png)
+![](doc/lion_out.png)
