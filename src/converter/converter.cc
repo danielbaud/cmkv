@@ -7,7 +7,7 @@ Converter::Converter(string path_in, string path_out)
 {
     // Number of colors to reduce to
     unsigned colors = 8;
-
+    
     // Size of Sphere to stop the convergence of kmeans
     double diff_threshold = 5;
 
@@ -65,17 +65,17 @@ Converter::Converter(string path_in, string path_out)
 // Function that writes the converted image
 bool Converter::convert() {
 
-    // Kernel size, 5 is great
+    // Kernel size, 7 is great
     unsigned kernel_size = 7;
 
     // Average pooling (applies blurr)
-    if (!this->average_pooling(this->image, kernel_size)) {
+    if (!this->average_pooling(kernel_size)) {
         cerr << "Invalid pooling k" << endl;
         return false;
     }
     
     // Pooling
-    vector<vector<int>> m = this->map_image(this->image);
+    vector<vector<int>> m = this->map_image();
     if (!this->pooling(m, kernel_size)) {
         cerr << "Invalid pooling k" << endl;
         return false;
@@ -115,14 +115,14 @@ int Converter::get_cluster(RGBQUAD& color) {
 }
 
 // Maps a image with clusters instead
-vector<vector<int>> Converter::map_image(const fipImage& image) {
-    unsigned width = image.getWidth();
-    unsigned height = image.getHeight();
+vector<vector<int>> Converter::map_image() {
+    unsigned width = this->image.getWidth();
+    unsigned height = this->image.getHeight();
     vector<vector<int>> m = vector<vector<int>>(width, vector<int>(height));
     for (unsigned i = 0; i < width; ++i) {
         for (unsigned j = 0; j < height; ++j) {
             RGBQUAD color;
-            image.getPixelColor(i, j, &color);
+            this->image.getPixelColor(i, j, &color);
             m[i][j] = this->get_cluster(color);
         }
     }
@@ -177,8 +177,8 @@ bool Converter::pooling(vector<vector<int>>& m, int k) {
 }
 
 // Blurring applied to a image
-bool Converter::average_pooling(fipImage& image, int k) {
-    fipImage ret = fipImage(image);
+bool Converter::average_pooling(int k) {
+    fipImage ret = fipImage(this->image);
     int width = ret.getWidth();
     int height = ret.getHeight();
     double size = k * k;
