@@ -49,5 +49,5 @@ This will take _in.png_ and generate the _out.png_ image as a result of color cl
 
 Here are some examples
 
-![](doc/lion.png)
-![](doc/lion_out.png)
+![](doc/lion.png?raw=true "Before")
+![](doc/lion_out.png?raw=true "After")
