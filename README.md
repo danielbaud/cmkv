@@ -49,11 +49,11 @@ This will take _in.png_ and generate the _out.png_ image as a result of color cl
 
 Here are some examples
 
-![](doc/lion.png?raw=true =384x384)
-![](doc/lion_out.png?raw=true =384x384)
+<img src="doc/lion.png" width="384"/>
+<img src="doc/lion_out.png" width="384"/>
 ---
-![](doc/smoke.png?raw=true =384x384)
-![](doc/smoke_out.png?raw=true =384x384)
+<img src="doc/smoke.png" width="384"/>
+<img src="doc/smoke_out.png" width="384"/>
 ---
-![](doc/parrots.png?raw=true)
-![](doc/parrots_out.png?raw=true)
+<img src="doc/parrots.png" width="384"/>
+<img src="doc/parrots_out.png" width="384"/>
