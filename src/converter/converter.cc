@@ -32,7 +32,7 @@ Converter::Converter(string path_in, string path_out)
     }
 
     // Kmeans Algorithm
-    double update_diff = 100;
+    double update_diff = diff_threshold + 1;
 
     while (update_diff > diff_threshold) {
         auto counts = vector<unsigned>(colors, 0);
