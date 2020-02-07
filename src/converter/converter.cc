@@ -2,12 +2,9 @@
 
 
 // Constructor
-Converter::Converter(string path_in, string path_out)
-: out(path_out)
+Converter::Converter(string path_in, string path_out, unsigned colors, unsigned kernel_size)
+: out(path_out), kernel_size(kernel_size)
 {
-    // Number of colors to reduce to
-    unsigned colors = 8;
-    
     // Size of Sphere to stop the convergence of kmeans
     double diff_threshold = 5;
 
@@ -65,18 +62,15 @@ Converter::Converter(string path_in, string path_out)
 // Function that writes the converted image
 bool Converter::convert() {
 
-    // Kernel size, 7 is great
-    unsigned kernel_size = 7;
-
     // Average pooling (applies blurr)
-    if (!this->average_pooling(kernel_size)) {
+    if (!this->average_pooling(this->kernel_size)) {
         cerr << "Invalid pooling k" << endl;
         return false;
     }
     
     // Pooling
     vector<vector<int>> m = this->map_image();
-    if (!this->pooling(m, kernel_size)) {
+    if (!this->pooling(m, this->kernel_size)) {
         cerr << "Invalid pooling k" << endl;
         return false;
     }

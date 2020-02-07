@@ -10,7 +10,7 @@ using namespace std;
 class Converter {
 
 public:
-    Converter(string path_in, string path_out);
+    Converter(string path_in, string path_out, unsigned colors, unsigned kernel_size);
 
     bool convert(); // converts the image
     double distance(RGBQUAD& color, int cluster); // get cluster distance
@@ -24,6 +24,7 @@ public:
     
 private:
     string out;
+    unsigned kernel_size;
     fipImage image;
     vector<RGBQUAD> clusters;
 };

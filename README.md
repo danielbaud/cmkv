@@ -1,6 +1,7 @@
 # cmkv project
 
-This project aims to reduce a image size by reducing the space of colors it is using and also reducing the number of small areas of same color
+This project aims to reduce a image size by reducing the space of colors it is using and also reducing the number of small areas of same color.
+It reads PNG file format and writes PNG file format.
 
 ## How it works
 
@@ -40,8 +41,15 @@ in the root of the project. This will generate a binary _cmkv_.
 To use it, do as follow:
 
 ```bash
-$ cmkv <in.png> <out.png>
+$ ./cmkv <in.png> <out.png>
 ```
+
+You can also set the number of different colors allowed and the kernel_size, which will be how much the image is blurred and the imperfections are smoothen:
+```bash
+$ ./cmkv -c <colors> -k <kernel_size> <in.png> <out.png>
+$ ./cmkv --colors <colors> --kernel <kernel_size> <in.png> <out.png>
+```
+Those options can be passed anywhere in the command line, but the flag must precede the value. The defaults values are 8 for colors and 7 for kernel size.
 
 This will take _in.png_ and generate the _out.png_ image as a result of color clustering and size reducing.
 

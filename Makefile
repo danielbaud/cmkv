@@ -3,7 +3,7 @@ CXXFLAGS = -Werror -Wextra -Wall -pedantic -std=c++17 -Ofast -g
 
 .PHONY: clean
 
-SRC = src/main.cc src/converter/converter.cc
+SRC = src/main.cc src/converter/converter.cc src/option/option.cc
 TARGET = cmkv
 
 
