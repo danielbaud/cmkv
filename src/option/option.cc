@@ -21,17 +21,13 @@ bool Option::parse(char **argv, int argc) {
                 }
                 this->colors = atoi(argv[i]);
             }
-            else if (arg == "-k" || arg == "--kernel") {
+            else if (arg == "-s" || arg == "--smoothen") {
                 i++;
                 if (i == argc) {
-                    cerr << argv[0] << ": kernel argument not found" << endl;
+                    cerr << argv[0] << ": smoothen argument not found" << endl;
                     return false;
                 }
-                this->kernel_size = atoi(argv[i]);
-                if (this->kernel_size % 2 == 0) {
-                    cerr << argv[0] << ": kernel size must be odd" << endl;
-                    return false;
-                }
+                this->kernel_size = 2 * atoi(argv[i]) + 1;
             }
             else {
                 cerr << argv[0] << ": " << arg << ": unknown option" << endl;

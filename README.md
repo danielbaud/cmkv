@@ -44,12 +44,12 @@ To use it, do as follow:
 $ ./cmkv <in.png> <out.png>
 ```
 
-You can also set the number of different colors allowed and the kernel_size, which will be how much the image is blurred and the imperfections are smoothen:
+You can also set the number of different colors allowed and how smooth you want the result to be, which will be how much the image is blurred and the imperfections are smoothen:
 ```bash
-$ ./cmkv -c <colors> -k <kernel_size> <in.png> <out.png>
-$ ./cmkv --colors <colors> --kernel <kernel_size> <in.png> <out.png>
+$ ./cmkv -c <colors> -s <smoothness> <in.png> <out.png>
+$ ./cmkv --colors <colors> --smoothen <smoothness> <in.png> <out.png>
 ```
-Those options can be passed anywhere in the command line, but the flag must precede the value. The defaults values are 8 for colors and 7 for kernel size.
+Those options can be passed anywhere in the command line, but the flag must precede the value. The defaults values are 8 for colors and 3 for smoothing.
 
 This will take _in.png_ and generate the _out.png_ image as a result of color clustering and size reducing.
 
